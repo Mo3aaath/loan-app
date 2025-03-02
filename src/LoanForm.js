@@ -1,3 +1,5 @@
+import InputContainer from "./InputContainer";
+
 export default function LoanForm() {
   return (
     <div
@@ -13,16 +15,11 @@ export default function LoanForm() {
         <h3 style={{ color: "white" }}>Requesting a Loan</h3>
         <hr></hr>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <label>Name</label>
-          <input></input>
-          <label>Phone Number</label>
-          <input></input>
-          <label>Age</label>
-          <input></input>
-          <label>Are you an employee?</label>
-          <input></input>
-          <label>Salary</label>
-          <input></input>
+          <InputContainer label={"Name"} type={"text"} />
+          <InputContainer label={"Phone Number"} type={"number"} />
+          <InputContainer label={"Age"} type={"number"} />
+          <InputContainer label={"Are you an employee?"} type={"checkbox"} />
+          <InputContainer label={"Salary"} type={"number"} />
           <button type="submit">Submit</button>
         </div>
       </form>
