@@ -28,7 +28,17 @@ export default function LoanForm() {
       [name]: type === "checkbox" ? checked : value,
     }));
   }
-  function handleSelectChange(event) {}
+  function handleSelectChange(event) {
+    setUserInput((prev) => ({
+      ...prev,
+      salary: event.target.value === "Less than $500" ? 0 : 1,
+    }));
+  }
+
+  function handleSubmitClick(event) {
+    event.preventDefault();
+    if (!(10 < userInput.age < 100)) console.log("Invalid age");
+  }
 
   return (
     <div
@@ -85,15 +95,19 @@ export default function LoanForm() {
           <label style={{ color: "white" }}>Salary</label>
           <select
             style={{ marginBottom: "20px" }}
-            value={userInput.salary}
+            name="salary"
             onChange={(e) => {
               handleSelectChange(e);
             }}
           >
-            <option>Less than $500</option>
-            <option>Above $500</option>
+            <option value="Less than $500">Less than $500</option>
+            <option value="Above $500">Above $500</option>
           </select>
-          <button type="submit" disabled={isDisabled()}>
+          <button
+            type="submit"
+            disabled={isDisabled()}
+            onClick={handleSubmitClick}
+          >
             Submit
           </button>
         </div>
