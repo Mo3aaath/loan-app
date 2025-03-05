@@ -1,6 +1,8 @@
 import InputContainer from "./InputContainer";
 import { useState } from "react";
+import Modal from "./Modal";
 export default function LoanForm() {
+  // user input state
   const [userInput, setUserInput] = useState({
     name: "",
     phone: "",
@@ -9,6 +11,13 @@ export default function LoanForm() {
     salary: 0,
   });
 
+  // modal open state
+  const [isOpen, setIsOpen] = useState(false);
+
+  // modal message state
+  const [modalContent, setModalContent] = useState({ message: "", color: "" });
+
+  // submit button disabler
   let isDisabled = () => {
     if (
       userInput.name !== "" &&
@@ -20,6 +29,7 @@ export default function LoanForm() {
     return true;
   };
 
+  // input change handler
   function handleInputChange(event) {
     const { name, value, type, checked } = event.target;
 
@@ -28,27 +38,24 @@ export default function LoanForm() {
       [name]: type === "checkbox" ? checked : value,
     }));
   }
-  function handleSelectChange(event) {
-    setUserInput((prev) => ({
-      ...prev,
-      salary: event.target.value === "Less than $500" ? 0 : 1,
-    }));
-  }
 
+  // submit button handler
   function handleSubmitClick(event) {
-    event.preventDefault();
-
-    // if age is in invalid range
-    if (!(userInput.age > 18 && userInput.age < 100))
-      console.log("Invalid age");
-
+    event.preventDefault(); //prevent page refresh
     // phone number regex
     let phoneRegex = /^(?:\+?966|966|0)?5\d{8}$/;
-    
+
     // if phone number is invalid
-    if (!phoneRegex.test(userInput.phone)) {
-      console.log("Invalid phone number");
+    if (!phoneRegex.test(userInput.phone))
+      setModalContent({ message: "Invalid phone number", color: "red" });
+    // if age is in invalid range
+    else if (!(userInput.age > 18 && userInput.age < 100))
+      setModalContent({ message: "Invalid Age", color: "red" });
+    // if input is valid
+    else {
+      setModalContent({ message: "Success!", color: "green" });
     }
+    setIsOpen(true);
   }
 
   return (
@@ -58,6 +65,7 @@ export default function LoanForm() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        alignItems:"center",
         borderRadius: "10px",
         padding: "20px",
         width: "60%",
@@ -69,9 +77,9 @@ export default function LoanForm() {
         <div style={{ display: "flex", flexDirection: "column" }}>
           <InputContainer
             label={"Name"}
-            name="name"
             type={"text"}
             value={userInput.name}
+            name="name"
             onChange={(e) => {
               handleInputChange(e);
             }}
@@ -108,11 +116,11 @@ export default function LoanForm() {
             style={{ marginBottom: "20px" }}
             name="salary"
             onChange={(e) => {
-              handleSelectChange(e);
+              handleInputChange(e);
             }}
           >
-            <option value="Less than $500">Less than $500</option>
-            <option value="Above $500">Above $500</option>
+            <option value={0}>Less than $500</option>
+            <option value={1}>Above $500</option>
           </select>
           <button
             type="submit"
@@ -123,6 +131,14 @@ export default function LoanForm() {
           </button>
         </div>
       </form>
+
+      {/* modal that appears when submitting the form */}
+      <Modal
+        message={modalContent.message}
+        color={modalContent.color}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      />
     </div>
   );
 }
