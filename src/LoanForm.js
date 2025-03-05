@@ -37,7 +37,18 @@ export default function LoanForm() {
 
   function handleSubmitClick(event) {
     event.preventDefault();
-    if (!(10 < userInput.age < 100)) console.log("Invalid age");
+
+    // if age is in invalid range
+    if (!(userInput.age > 18 && userInput.age < 100))
+      console.log("Invalid age");
+
+    // phone number regex
+    let phoneRegex = /^(?:\+?966|966|0)?5\d{8}$/;
+    
+    // if phone number is invalid
+    if (!phoneRegex.test(userInput.phone)) {
+      console.log("Invalid phone number");
+    }
   }
 
   return (
